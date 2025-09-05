@@ -1,10 +1,14 @@
 var xhr = new XMLHttpRequest();
-var url = './health_article.json';
-xhr.open('GET', url, true);
+xhr.open('GET', './health_article.json', true);
 xhr.responseType = 'json';
-var articles = xhr.response.articles;
-var articlesDiv = document.getElementById('articles');
-  articles.forEach(function(article) {
+
+xhr.onload = function() {
+  if (xhr.status === 200) {
+    var data = xhr.response;
+    var articles = data.articles;
+    var articlesDiv = document.getElementById('articles');
+
+    articles.forEach(function(article) {
       var articleDiv = document.createElement('div');
       articleDiv.classList.add('article');
 
@@ -43,7 +47,9 @@ var articlesDiv = document.getElementById('articles');
 
       articlesDiv.appendChild(articleDiv);
     });
-var articleDiv = document.createElement('div');
-articleDiv.classList.add('article');
-articleDiv.appendChild(title);
+  } else {
+    console.error('Failed to load JSON:', xhr.statusText);
+  }
+};
+
 xhr.send();
